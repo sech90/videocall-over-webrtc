@@ -86,12 +86,14 @@ var CallManager = new function() {
     }
 
     this.Hang = function() {
-        isStarted = false;
-        $remoteVideo[0].pause();
-        // isAudioMuted = false;
-        // isVideoMuted = false;
-        pc.close();
-        pc = null;
+        if(isStarted){
+            isStarted = false;
+            $remoteVideo[0].pause();
+            // isAudioMuted = false;
+            // isVideoMuted = false;
+            pc.close();
+            pc = null;
+        }
     }
 
     this.CloseStream = function(){

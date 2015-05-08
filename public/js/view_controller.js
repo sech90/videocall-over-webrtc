@@ -6,7 +6,9 @@ var ViewManager = new function(){
 	var $clientTmpl;
 	var $incomingView;
 	var $diallingView;
+	var $noClientsMex;
 	var $callView;
+	var $table;
 	var $_overlayView;
 	var self = this;
 
@@ -18,6 +20,7 @@ var ViewManager = new function(){
 		$diallingView 	= $content.find("#call-dialling-view");
 		$callView	 	= $content.find("#call-view");
 		$table 			= $list.find("tbody");
+		$noClientsMex	= $list.find(".no-clients");
 		$clientTmpl 	= $table.find(".client").clone();
 
 		//for username validation
@@ -46,6 +49,8 @@ var ViewManager = new function(){
 
 			$newCli.appendTo($table);
 			this.ChangeStatus(name, status);
+
+			$noClientsMex.hide();
 		}
 	}
 
@@ -53,23 +58,31 @@ var ViewManager = new function(){
 
 		var $cli = $("#"+name, $list);
 		$cli.remove();
+
+		if($table.children().length == 0)
+			$noClientsMex.show();
 	}
 
 	this.ChangeStatus = function(name, newStatus){
 		
 		var $status = $list.find("#"+name+" td.status");
-
+		var $button = $list.find("#"+name+" button");
 
 		if($status){
 			var newClass;
 
-			if(newStatus == "available")
+			if(newStatus == "available"){
 				newClass = "bg-success";
-			else if(newStatus == "busy")
-				newClass = "bg-danger";
-			else
-				newClass = "bg-warning";
-
+				$button.removeAttr('disabled');
+			}
+			else{
+				$button.attr('disabled','disabled');
+				
+				if(newStatus == "busy")
+					newClass = "bg-danger";
+				else
+					newClass = "bg-warning";
+			}
 			$status.removeClass().addClass("status "+newClass);
 			$status.text(newStatus);
 		}
