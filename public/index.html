@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+ *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description" content="WebRTC code samples">
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta itemprop="description" content="Client-side WebRTC code samples">
+  <meta itemprop="name" content="WebRTC code samples">
+  <meta id="theme-color" name="theme-color" content="#ffffff">
+
+
+  <title>Peer connection: audio only</title>
+
+  <link rel="stylesheet" href="css/bootstrap.css" />
+
+  <script src="js/lib/jquery.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="//cdn.temasys.com.sg/adapterjs/0.10.x/adapter.min.js"></script>
+</head>
+
+<body>
+
+	<div id="content" class="container-fluid" style="display:none">
+
+		<div id="client-list">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th>Status</th>
+						<th>Name</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="client">
+						<td class="status"></td>
+						<td class="name"></td>
+						<td class="buttons">
+							<button type="button" class="btn btn-success">Call</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="join">
+			<form class="text-center">
+				<div class="form-group">
+					<label for="username">Choose a Name</label>
+					<input type="text" class="form-control" id="username">
+				</div>
+				<button type="submit" class="btn btn-primary">Join Room</button>
+			</form>
+			<div class="text-center">
+				<p class="message"></p>
+			</div>
+		</div>
+		<div id="call-incoming-view" class="container-fluid">
+			<h1>Incoming call from <span class="name"></span></h1>
+			<button type="button" class="btn btn-success answer">Answer</button>
+			<button type="button" class="btn btn-danger hang">Hang</button>
+		</div>
+
+		<div id="call-dialling-view" class="container-fluid">
+			<h1>Calling <span class="name">...</span></h1>
+			<button type="button" class="btn btn-danger hang">Hang</button>
+		</div>
+
+		<div id="call-view" class="container-fluid">
+			<h1>Talking with <span class="name"></span></h1>
+			<div class="row">
+				<!--<video id='localVideo' class="col-md-6" autoplay muted></video>-->
+			    <video id='remoteVideo' style="width:100%" class="col-md-12" autoplay></video>
+			</div>
+			<button type="button" class="btn btn-danger hang">Hang</button>
+		</div>
+		
+	</div>
+
+	<script src="js/view_controller.js"></script>
+	<script src="js/socket_controller.js"></script>
+	<script src="js/call_controller.js"></script>
+	<script src="js/app_main.js"></script>
+
+</body>
+</html>
