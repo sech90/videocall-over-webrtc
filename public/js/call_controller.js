@@ -66,8 +66,6 @@ var CallManager = new function() {
                 candidate: message.candidate
             });
             pc.addIceCandidate(candidate);
-        } else if (message === 'bye' && isStarted) {
-            this.Hang();
         }
     }
 
@@ -94,7 +92,6 @@ var CallManager = new function() {
         // isVideoMuted = false;
         pc.close();
         pc = null;
-        self.SendMessage('bye');
     }
 
     this.CloseStream = function(){
@@ -178,7 +175,6 @@ var CallManager = new function() {
         // Set Opus as the preferred codec in SDP if Opus is present.
         sessionDescription.sdp = preferOpus(sessionDescription.sdp);
         pc.setLocalDescription(sessionDescription);
-        log('setLocalAndSendMessage sending message' + json(sessionDescription));
         self.SendMessage(sessionDescription);
     }
 
