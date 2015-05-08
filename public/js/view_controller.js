@@ -1,6 +1,3 @@
-function log(mex){console.log(mex);}
-function json(obj){return JSON.stringify(obj);}
-
 
 var ViewManager = new function(){
 

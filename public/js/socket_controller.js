@@ -9,16 +9,13 @@ var SocketManager = new function(address){
 		function call(event){
 			return function(data){
 				if(isJoined){
-					//log("**event ["+event+"]: "+json(data));
+					log("**remote event ["+event+"]: "+json(data));
 					cb(data);
 				}
 				else if(event == "joined"){
-					//log("**event ["+event+"]: "+json(data));
+					log("**remote event ["+event+"]: "+json(data));
 					cb(data);
 				}
-				//else
-					//log("__refused ["+event+"]: "+json(data));
-
 			}
 		}
 	}

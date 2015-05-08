@@ -79,7 +79,6 @@
 		<div id="call-view" class="container-fluid">
 			<h1>Talking with <span class="name"></span></h1>
 			<div class="row">
-				<!--<video id='localVideo' class="col-md-6" autoplay muted></video>-->
 			    <video id='remoteVideo' style="width:100%" class="col-md-12" autoplay></video>
 			</div>
 			<button type="button" class="btn btn-danger hang">Hang</button>
@@ -87,6 +86,10 @@
 		
 	</div>
 
+	<script type="text/javascript">
+		function log(mex){console.log(mex);}
+		function json(obj){return JSON.stringify(obj);}
+	</script>
 	<script src="js/view_controller.js"></script>
 	<script src="js/socket_controller.js"></script>
 	<script src="js/call_controller.js"></script>

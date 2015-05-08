@@ -4,19 +4,14 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var debug = require('debug')('lovewiththecocco');
 var signaling = require('./signalserver');
 
 
 var app = express();
 
 
-
-
 // view engine setup
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -58,6 +53,6 @@ app.use(function(err, req, res, next) {
 
 
 var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
+  console.log('Express server listening on port ' + server.address().port);
 });
 signaling.start(server);

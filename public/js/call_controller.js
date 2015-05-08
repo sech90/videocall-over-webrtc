@@ -49,14 +49,9 @@ var CallManager = new function() {
 
     this.HandleMessage = function(message) {
 
-    	//log("[message]: "+json(message));
-
         if (message === 'got user media') {
-        	log("remote media ");
             maybeStart();
         } else if (message.type === 'offer') {
-            
-            log("Got offer "+isInitiator+" "+isStarted);
 
             if (!isInitiator && !isStarted)
                 maybeStart();
@@ -80,8 +75,7 @@ var CallManager = new function() {
 	    $remoteVideo = $('#remoteVideo');
 	    
         getUserMedia(constraints, handleUserMedia, handleUserMediaError);
-        log('Getting user media with constraints', constraints);
-
+    
        /* if (location.hostname != "localhost") {
             requestTurn('https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913');
         }*/
@@ -110,7 +104,6 @@ var CallManager = new function() {
 
     function handleUserMedia(stream) {
     	
-        log("got local stream");
         localStream = stream;
         window.stream = localStream;
         
@@ -126,7 +119,6 @@ var CallManager = new function() {
             pc.addStream(localStream);
             isStarted = true;
 
-            log('*** START. Initiator: '+ isInitiator);
             if (isInitiator) {
                 doCall();
             }
@@ -139,7 +131,7 @@ var CallManager = new function() {
             pc.onicecandidate = handleIceCandidate;
             pc.onaddstream = handleRemoteStreamAdded;
             pc.onremovestream = handleRemoteStreamRemoved;
-            log('Created RTCPeerConnnection');
+
         } catch (e) {
             log('Failed to create PeerConnection, exception: ' + e.message);
             alert('Cannot create RTCPeerConnection object.');
@@ -148,7 +140,7 @@ var CallManager = new function() {
     }
 
     function handleIceCandidate(event) {
-        log('handleIceCandidate event: ', event);
+
         if (event.candidate) {
             self.SendMessage({
                 type: 'candidate',
@@ -162,14 +154,14 @@ var CallManager = new function() {
     }
 
     function handleRemoteStreamAdded(event) {
-        log('Remote stream added.');
         $remoteVideo.attr("src", window.URL.createObjectURL(event.stream));
         $remoteVideo[0].play();
         remoteStream = event.stream;
+        log('Remote stream added.');
     }
 
     function handleCreateOfferError(event) {
-        log('createOffer() error: ', e);
+        log('createOffer() error: '+json(e));
     }
 
     function doCall() {
@@ -186,7 +178,7 @@ var CallManager = new function() {
         // Set Opus as the preferred codec in SDP if Opus is present.
         sessionDescription.sdp = preferOpus(sessionDescription.sdp);
         pc.setLocalDescription(sessionDescription);
-        log('setLocalAndSendMessage sending message', sessionDescription);
+        log('setLocalAndSendMessage sending message' + json(sessionDescription));
         self.SendMessage(sessionDescription);
     }
 
@@ -220,7 +212,7 @@ var CallManager = new function() {
     }
 
     function handleRemoteStreamRemoved(event) {
-        console.log('Remote stream removed. Event: ', event);
+        console.log('Remote stream removed. Event: ' +json(event));
     }
 
     ///////////////////////////////////////////

@@ -23,13 +23,8 @@ function start(app){
 			else if(!receiver){
 				socket.emit("error-mex","message destination "+data.to+" unknown");
 			}
-			else{
-				//data.from = socket.name;
-
-				console.log("["+sender.name+"]: "+JSON.stringify(data));
-
+			else
 				receiver.socket.emit("message",data);
-			}
 		});
 
 		socket.on('join', function (name) {
@@ -91,7 +86,6 @@ function start(app){
 				
 				delete clients[socket.name];
 				socket.broadcast.emit('client-disconnected', socket.name);
-				console.log(socket.name+" left");
 			}
 		}
 	});
