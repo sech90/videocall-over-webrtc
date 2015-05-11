@@ -15,7 +15,7 @@ var CallManager = new function() {
         audio: true,
         video: true
     };
-    var pc_config = {
+  /*  var pc_config = {
         'iceServers': [{
             'url': 'stun:stun.l.google.com:19302'
         }, {
@@ -27,7 +27,14 @@ var CallManager = new function() {
             'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
             'username': '28224511:1379330808'
         }]
+    };*/
+
+    var pc_config = {
+        'iceServers': [{
+            'url': 'stun:stun.l.google.com:19302'
+        }]
     };
+
     var pc_constraints = {
         'optional': [{
             'DtlsSrtpKeyAgreement': true
