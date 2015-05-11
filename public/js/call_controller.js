@@ -4,9 +4,7 @@ var CallManager = new function() {
     var isStarted = false;
     var localStream;
     var pc;
-    var remotePcName;
     var remoteStream;
-    var turnReady;
 
     var $remoteVideo;
     var self = this;
@@ -15,21 +13,6 @@ var CallManager = new function() {
         audio: true,
         video: true
     };
-  /** /  
-  var pc_config = {
-        'iceServers': [{
-            'url': 'stun:stun.l.google.com:19302'
-        }, {
-            'url': 'turn:192.158.29.39:3478?transport=udp',
-            'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-            'username': '28224511:1379330808'
-        }, {
-            'url': 'turn:192.158.29.39:3478?transport=tcp',
-            'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-            'username': '28224511:1379330808'
-        }]
-    };
-    /**/
 
     var pc_config = {
         'iceServers': [
@@ -69,29 +52,6 @@ var CallManager = new function() {
 			}
 		]
     };
-    /** /
-
-    var pc_config = {
-        'iceServers': [{
-            'url': 'stun:stun.l.google.com:19302'
-        }, {
-            'url': 'turn:130.211.78.35:3479?transport=tcp',
-            'credential': 'AOYE3sW/YzVrHboo4o4VLcho8og=',
-            'username': '1431471690:41784574'
-        }]
-    };
-/** /
-    var pc_config = {
-        'iceServers': [{
-            'url': 'stun:stun.l.google.com:19302'
-        }]
-    };
-/**/
-    var pc_constraints = {
-        'optional': [{
-            'DtlsSrtpKeyAgreement': true
-        }]
-    };
 
     // Set up audio and video regardless of what devices are present.
     var sdpConstraints = {
@@ -108,18 +68,18 @@ var CallManager = new function() {
 
     this.HandleMessage = function(message) {
 
-        if (message === 'got user media') {
-            maybeStart();
-        } else if (message.type === 'offer') {
+       if (message.type === 'offer') {
 
             if (!isInitiator && !isStarted)
-                maybeStart();
+                startCommunication();
 
             pc.setRemoteDescription(new RTCSessionDescription(message));
             doAnswer();
-        } else if (message.type === 'answer' && isStarted) {
+        } 
+        else if (message.type === 'answer' && isStarted) {
             pc.setRemoteDescription(new RTCSessionDescription(message));
-        } else if (message.type === 'candidate' && isStarted) {
+        } 
+        else if (message.type === 'candidate' && isStarted) {
             var candidate = new RTCIceCandidate({
                 sdpMLineIndex: message.label,
                 candidate: message.candidate
@@ -132,24 +92,18 @@ var CallManager = new function() {
 	    $remoteVideo = $('#remoteVideo');
 	    
         getUserMedia(constraints, handleUserMedia, handleUserMediaError);
-    
-        if (location.hostname != "localhost") {
-            requestTurn('https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913');
-        }
     }
 
     this.StartCall = function(initiator){
     	isInitiator = initiator;
         if (isInitiator)
-            maybeStart();
+            startCommunication();
     }
 
     this.Hang = function() {
         if(isStarted){
             isStarted = false;
             $remoteVideo[0].pause();
-            // isAudioMuted = false;
-            // isVideoMuted = false;
             pc.close();
             pc = null;
         }
@@ -171,7 +125,7 @@ var CallManager = new function() {
         log('getUserMedia error: '+ json(error));
     }
 
-    function maybeStart() {
+    function startCommunication() {
         if (!isStarted && typeof localStream != 'undefined') {
             createPeerConnection();
             pc.addStream(localStream);
@@ -239,40 +193,10 @@ var CallManager = new function() {
         self.SendMessage(sessionDescription);
     }
 
-    function requestTurn(turn_url) {
-        var turnExists = false;
-        for (var i in pc_config.iceServers) {
-            if (pc_config.iceServers[i].url.substr(0, 5) === 'turn:') {
-                turnExists = true;
-                turnReady = true;
-                break;
-            }
-        }
-        if (!turnExists) {
-            console.log('Getting TURN server from ', turn_url);
-            // No TURN server. Get one from computeengineondemand.appspot.com:
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var turnServer = JSON.parse(xhr.responseText);
-                    console.log('Got TURN server: ', turnServer);
-                    pc_config.iceServers.push({
-                        'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
-                        'credential': turnServer.password
-                    });
-                    turnReady = true;
-                }
-            };
-            xhr.open('GET', turn_url, true);
-            xhr.send();
-        }
-    }
-
     function handleRemoteStreamRemoved(event) {
         console.log('Remote stream removed. Event: ' +json(event));
     }
 
-    ///////////////////////////////////////////
 
     // Set Opus as the default audio codec if it's present.
     function preferOpus(sdp) {
