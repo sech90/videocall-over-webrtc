@@ -74,9 +74,9 @@ var CallManager = new function() {
 	    
         getUserMedia(constraints, handleUserMedia, handleUserMediaError);
     
-       /* if (location.hostname != "localhost") {
+        if (location.hostname != "localhost") {
             requestTurn('https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913');
-        }*/
+        }
     }
 
     this.StartCall = function(initiator){
