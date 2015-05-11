@@ -29,7 +29,7 @@ var CallManager = new function() {
             'username': '28224511:1379330808'
         }]
     };
-    /** /
+    /**/
 
     var pc_config = {
         'iceServers': [
@@ -69,7 +69,7 @@ var CallManager = new function() {
 			}
 		]
     };
-    /**/
+    /** /
 
     var pc_config = {
         'iceServers': [{
@@ -185,7 +185,7 @@ var CallManager = new function() {
 
     function createPeerConnection() {
         try {
-            pc = new RTCPeerConnection(null);
+            pc = new RTCPeerConnection(pc_config);
             pc.onicecandidate = handleIceCandidate;
             pc.onaddstream = handleRemoteStreamAdded;
             pc.onremovestream = handleRemoteStreamRemoved;
