@@ -69,7 +69,7 @@ function start(app){
 			var connectedCli = client.connectedWith;
 
 			if(!connectedCli)
-				socket.emit("not connected");
+				socket.emit("error-mex","not connected");
 			else
 				hang(client, connectedCli);
 		});

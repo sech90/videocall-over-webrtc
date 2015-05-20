@@ -1,5 +1,5 @@
 
-SocketManager.On("error-mex", function(){});
+SocketManager.On("error-mex", function(mex){console.error("Server returned an error: "+mex)});
 SocketManager.On("joined", OnJoinRoom);
 SocketManager.On("client-connected", OnNewRemoteClient);
 SocketManager.On("client-disconnected", OnRemoteCLientDisconnect);
@@ -46,7 +46,6 @@ function OnRemoteHang(){
 }
 
 function OnRemoteAnswer(name){
-	log(name+" ANSWERED. Starting Call");
 	ViewManager.AnswerCall(name, SocketManager.Hang);
 	CallManager.StartCall(true);
 }
