@@ -9,7 +9,9 @@ var ViewManager = new function(){
 	var $noClientsMex;
 	var $callView;
 	var $table;
+	var $remoteVideo
 	var $_overlayView;
+
 	var self = this;
 
 	this.Initialize = function(JoinRoomHandler){
@@ -19,12 +21,17 @@ var ViewManager = new function(){
 		$incomingView 	= $content.find("#call-incoming-view");
 		$diallingView 	= $content.find("#call-dialling-view");
 		$callView	 	= $content.find("#call-view");
+		$remoteVideo	= $callView.find("#remoteVideo");
 		$table 			= $list.find("tbody");
 		$noClientsMex	= $list.find(".no-clients");
 		$clientTmpl 	= $table.find(".client").clone();
 
 		//for username validation
 		SetupForm(JoinRoomHandler);
+
+		//I'm not good at CSS
+		$( window ).resize(SetVideoSize);
+		SetVideoSize();
 
 		//remove original client row, which is not valid HTML
 		$table.find(".client").remove();
@@ -162,5 +169,10 @@ var ViewManager = new function(){
 	function ShowError(mex, $el){
 		$el.text(mex);
 		$el.addClass("bg-danger");
+	}
+
+	function SetVideoSize(){
+		var winH = $(window).height();
+		$remoteVideo.css("max-height",winH-(winH*0.2));
 	}
 }
