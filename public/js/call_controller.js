@@ -167,6 +167,9 @@ var CallManager = new function() {
 
     function handleRemoteStreamAdded(event) {
         $remoteVideo.attr("src", window.URL.createObjectURL(event.stream));
+	if($remoteVideo[0].isPlaying)
+	    return;
+	    
         $remoteVideo[0].play();
         remoteStream = event.stream;
         log('Remote stream added.');
@@ -183,7 +186,7 @@ var CallManager = new function() {
 
     function doAnswer() {
         log('Sending answer to peer.');
-        pc.createAnswer(setLocalAndSendMessage, null, sdpConstraints);
+        pc.createAnswer(setLocalAndSendMessage, printError, sdpConstraints);
     }
 
     function setLocalAndSendMessage(sessionDescription) {
@@ -197,6 +200,10 @@ var CallManager = new function() {
         console.log('Remote stream removed. Event: ' +json(event));
     }
 
+    function printError(e){
+        console.error('Error callback: ' +json(e));
+    }
+	
 
     // Set Opus as the default audio codec if it's present.
     function preferOpus(sdp) {
