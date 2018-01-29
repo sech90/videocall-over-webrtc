@@ -166,10 +166,7 @@ var CallManager = new function() {
     }
 
     function handleRemoteStreamAdded(event) {
-        $remoteVideo.attr("src", window.URL.createObjectURL(event.stream));
-	if($remoteVideo[0].isPlaying)
-	    return;
-	    
+        $remoteVideo.attr("src", window.URL.createObjectURL(event.stream));	    
         $remoteVideo[0].play();
         remoteStream = event.stream;
         log('Remote stream added.');
